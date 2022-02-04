@@ -15,9 +15,9 @@ import java.util.UUID;
 @Setter
 public class BaseEntity {
   @Id
-  @GeneratedValue(generator = "UUID")
-  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-  @Column(updatable = false, nullable = false)
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(updatable = false, nullable = false ,columnDefinition = "binary(16)")
   private UUID id;
 
   @Column(name = "created_on")

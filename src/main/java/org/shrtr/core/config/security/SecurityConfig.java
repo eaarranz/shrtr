@@ -54,16 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> {
-            Optional<User> byUsername = userRepo.findByUsername(username);
-            return userRepo
-                    .findByUsername(username)
-                    .orElseThrow(
-                            () -> new UsernameNotFoundException(
-                                    format("User: %s, not found", username)
-                            )
-                    );
-        });
+        auth.userDetailsService(username -> userRepo
+                .findByUsername(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                format("User: %s, not found", username)
+                        )
+                ));
     }
 
     // Set password encoding schema
@@ -98,6 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // Our public endpoints
                 .antMatchers("/authentication/*").permitAll()
+                .antMatchers("/r/*").permitAll()
                 // Our private endpoints
                 .anyRequest().authenticated();
 

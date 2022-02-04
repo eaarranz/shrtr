@@ -2,14 +2,12 @@ package org.shrtr.core.domain.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")

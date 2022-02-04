@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.shrtr.core.domain.entities.User;
 import org.shrtr.core.domain.repositories.UsersRepository;
 import org.springframework.http.HttpHeaders;
+import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -16,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static java.util.List.of;
 import static java.util.Optional.ofNullable;
@@ -52,13 +55,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 .orElse(null);
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null
+                userDetails, null, List.of(new SimpleGrantedAuthority("USER"))
         );
 
-        authentication
-                .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(request, response);
+        try {
+            chain.doFilter(request, response);
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
     }
 }
