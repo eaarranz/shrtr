@@ -27,4 +27,4 @@ jobs:
         with:
           context: monolith
           push: true
-          tags: guillermomkt/shrtr:latest,uillermomkt/shrtr:${{ env.GITHUB_SHA }}
+          tags: guillermomkt/shrtr:latest,guillermomkt/shrtr:${{ env.GITHUB_SHA }}
