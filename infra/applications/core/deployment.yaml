@@ -4,7 +4,6 @@ metadata:
   labels:
     component: core-deployment
   name: core-deployment
-  namespace: default
 spec:
   replicas: 1
   selector:
