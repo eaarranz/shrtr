@@ -3,6 +3,8 @@ package org.shrtr.core.controllers;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.shrtr.core.config.security.JwtTokenUtil;
 import org.shrtr.core.domain.entities.User;
 import org.shrtr.core.services.UserService;
@@ -29,6 +31,7 @@ public class AuthenticationController {
   private final AuthenticationManager authenticationManager;
   private final JwtTokenUtil jwtTokenUtil;
   private final UserService userService;
+  private final Producer<String, String> kafkaProducer;
 
   @PostMapping("login")
   public ResponseEntity<User> login(@RequestBody @Valid AuthRequest request) {
@@ -48,7 +51,8 @@ public class AuthenticationController {
 
   @PostMapping("register")
   public User register(@RequestBody @Valid CreateUserRequest request) {
-    return userService.create(request);
+    User user = userService.create(request);
+    return user;
   }
 
   @Data

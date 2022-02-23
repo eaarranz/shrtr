@@ -28,3 +28,6 @@ jobs:
           context: "{{defaultContext}}:monolith"
           push: true
           tags: "guillermomkt/shrtr:latest,guillermomkt/shrtr:${{ env.GITHUB_SHA }}"
+      - name: Test
+        run: docker-compose up tests
+
