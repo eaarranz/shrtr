@@ -31,6 +31,7 @@ public class LinkService {
     link.setCounter(0);
     link.setShortened(randomStringAlphaNumeric(8));
     linksRepository.save(link);
+
     return link;
   }
 

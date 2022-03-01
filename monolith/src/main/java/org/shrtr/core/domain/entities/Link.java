@@ -1,5 +1,6 @@
 package org.shrtr.core.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "links")
 @Setter
 @Getter
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Link extends BaseEntity {
   private String original;
   @Column(unique = true)

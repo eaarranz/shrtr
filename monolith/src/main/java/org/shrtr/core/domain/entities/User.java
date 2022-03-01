@@ -1,5 +1,6 @@
 package org.shrtr.core.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class User extends BaseEntity implements UserDetails {
 
   private boolean enabled = true;
@@ -21,7 +23,7 @@ public class User extends BaseEntity implements UserDetails {
   private String firstName;
   private String lastName;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "user_roles",
     joinColumns = @JoinColumn(name = "user_id"),
