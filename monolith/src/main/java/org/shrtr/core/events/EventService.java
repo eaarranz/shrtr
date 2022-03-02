@@ -98,10 +98,14 @@ public class EventService {
     }
 
     public void entityEvent(Object entity, String topicTail) {
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("entity", entity);
+        eventData.put("date", System.currentTimeMillis());
+        eventData.put("class", entity.getClass().getSimpleName());
         try {
             ProducerRecord<String, String> event = new ProducerRecord<>(
                     entity.getClass().getSimpleName() + topicTail,
-                    objectMapper.writeValueAsString(entity) // parse json
+                    objectMapper.writeValueAsString(eventData) // parse json
             );
             kafkaProducer.send(event);
         } catch (JsonProcessingException e) {
