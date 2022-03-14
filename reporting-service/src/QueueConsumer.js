@@ -2,6 +2,7 @@ const {KAFKA_BROKERS, KAFKA_CLIENT_ID, KAFKA_GROUP_ID, KAFKA_LISTEN_TO_TOPICS} =
 const { Kafka } = require('kafkajs')
 
 const brokers = KAFKA_BROKERS.split(',')
+console.log(`Connecting to kafkas: ${brokers.join(',')}`)
 
 const kafka = new Kafka({
     clientId: KAFKA_CLIENT_ID,
