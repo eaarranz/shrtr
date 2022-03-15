@@ -1,10 +1,15 @@
 version: "3"
 
 services:
+
+  gateway:
+    build:
+      context: gateway
+    ports:
+      - 8079:3000
+
   mariadb:
     image: mariadb:10.3
-    ports:
-      - "3306:3306"
     volumes:
       - ${PWD}/data/mariadb:/var/lib/mysql
     environment:
@@ -15,8 +20,6 @@ services:
   monolith:
     build:
       context: monolith
-    ports:
-      - "8080:8080"
     depends_on:
       - mariadb
       - kafka
@@ -46,9 +49,6 @@ services:
       - PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
       - --advertise-kafka-addr
       - PLAINTEXT://kafka:29092,OUTSIDE://kafka:9092
-    ports:
-      - "29092:29092"
-      - "9092:9092"
 
   reporting__service:
     depends_on:
@@ -67,12 +67,9 @@ services:
       context: reporting-api
     environment:
       ES_HOSTS: "http://reporting__es01:9200"
-    ports:
-      - 8081:3000
+
   reporting__es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.0.1
-    ports:
-      - 9200:9200
     environment:
       - node.name=es01
       - cluster.name=reporting

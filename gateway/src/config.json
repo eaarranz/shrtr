@@ -1,0 +1,14 @@
+{
+  "routes": [
+    {
+      "prefix": "/v2/reporting",
+      "host": "http://reporting__api:3000",
+      "stripPrefix": true
+    },
+    {
+      "prefix": "",
+      "host": "http://monolith:8080",
+      "stripPrefix": false
+    }
+  ]
+}
