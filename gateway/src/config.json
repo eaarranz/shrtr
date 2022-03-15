@@ -3,12 +3,32 @@
     {
       "prefix": "/v2/reporting",
       "host": "http://reporting__api:3000",
-      "stripPrefix": true
+      "stripPrefix": true,
+      "auth": [
+        {
+          "prefix": "",
+          "auth": "token"
+        }
+      ]
     },
     {
       "prefix": "",
       "host": "http://monolith:8080",
-      "stripPrefix": false
+      "stripPrefix": false,
+      "auth": [
+        {
+          "prefix": "/authentication/",
+          "auth": "none"
+        },
+        {
+          "prefix": "/r/",
+          "auth": "none"
+        },
+        {
+          "prefix": "",
+          "auth": "token"
+        }
+      ]
     }
   ]
 }

@@ -1,5 +1,6 @@
 {
   "name": "gateway",
+  "module": "src",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3",
-    "http-proxy": "^1.18.1"
+    "http-proxy": "^1.18.1",
+    "node-fetch": "^2.6.7"
   }
 }
