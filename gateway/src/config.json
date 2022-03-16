@@ -12,6 +12,33 @@
       ]
     },
     {
+      "prefix": "/v1/reporting",
+      "host": "http://monolith:8080/reporting",
+      "stripPrefix": true,
+      "auth": [
+        {
+          "prefix": "",
+          "auth": "token"
+        }
+      ]
+    },
+    {
+      "prefix": "/reporting",
+      "host": "http://monolith:8080/reporting",
+      "stripPrefix": true,
+      "auth": [
+        {
+          "prefix": "",
+          "auth": "token"
+        }
+      ]
+    },
+    {
+      "prefix": "/r/",
+      "host": "http://redirect__api:3000",
+      "stripPrefix": false
+    },
+    {
       "prefix": "",
       "host": "http://monolith:8080",
       "stripPrefix": false,
@@ -29,6 +56,10 @@
           "auth": "token"
         }
       ]
+    },{
+      "prefix": "/api/link",
+      "method": "DELETE",
+      "topic": "delete-link"
     }
   ]
 }

@@ -5,10 +5,17 @@ services:
   gateway:
     build:
       context: gateway
+    depends_on:
+      - auth-api
+      - gateway-cache
     ports:
       - 8079:3000
     environment:
       AUTH_HOST: "http://auth-api:8080"
+      CACHE_HOST: "gateway-cache:6379"
+
+  gateway-cache:
+    image: redis:latest
 
   mariadb:
     image: mariadb:10.3

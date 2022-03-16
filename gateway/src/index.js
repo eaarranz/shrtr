@@ -6,6 +6,7 @@ const port = 3000
 const config = require('./config.json');
 const httpProxy = require('http-proxy');
 const {AUTH_HOST} = require("./settings");
+const cache = require("./cache");
 const proxy = httpProxy.createProxyServer({});
 
 app.all('*', async (req, res, next) => {
@@ -24,13 +25,20 @@ app.all('*', async (req, res, next) => {
             if (auth.auth === 'token') {
                 console.log("Going to request token validation")
                 const token = req.header('Authorization');
-                const authResponse = await fetch(AUTH_HOST + "/authentication/validate", {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ token })
-                }).then(authResponse => authResponse.json());
+                let authResponse = await cache.get('auth:' + token);
+                if (authResponse === null) {
+                    console.log("Not cached, going to request to auth host");
+                    authResponse = await fetch(AUTH_HOST + "/authentication/validate", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ token })
+                    }).then(authResponse => authResponse.json());
+                    await cache.set('auth:' + token, authResponse);
+                } else {
+                    console.log("Cached!");
+                }
                 console.log(`Got token validation: ${JSON.stringify(authResponse)}`);
                 if (!authResponse.ok) {
                     res.sendStatus(401);
@@ -38,14 +46,25 @@ app.all('*', async (req, res, next) => {
                 }
             }
         }
-        proxy.web(req, res, {
-            target: route.host
-        }, next);
+        const cacheKey = buildCacheKey(req);
+        const cached = await cache.get(cacheKey);
+        if (cached === null) {
+            proxy.web(req, res, {
+                target: route.host
+            }, () => {
+                const cachePolicy = res.header('X-Cache-Control');
+                if (cachePolicy && cachePolicy !== 'none') {
+                    cache.set(cacheKey, res.body(), {})
+                }
+            });
+        } else {
+            res.sendStatus().send()
+        }
     } else {
         res.sendStatus(404).send({});
     }
 })
-
+cache.setupCache();
 app.listen(port, () => {
     console.log(`Listening on port ${port}`)
 })
